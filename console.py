@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-    
+
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
         return True
@@ -70,14 +70,16 @@ class HBNBCommand(cmd.Cmd):
 
             else:
                 if test[0] == '-':
-                    test = test.lstrip('-') 
+                    test = test.lstrip('-')
                 if ('.' in test) and (test.replace('.', '', 1).isdigit()):
                     value = float(value)
-                else:
+                elif test.isdigit():
                     value = int(value)
+                else:
+                    pass
 
             new_instance.__dict__[name] = value
-  
+
         storage.save()
         print(new_instance.id)
 
@@ -274,6 +276,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
