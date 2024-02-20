@@ -1,5 +1,12 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 import json
 
 
@@ -8,13 +15,20 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        return FileStorage.__objects
+        if cls:
+            instances = {}
+            for key, value in self.__objects.items():
+                if isinstance(value, cls):
+                    instances[key] = value
+            return instances
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        class_name = f"{obj.__class__.__name__}.{obj.id}"
+        self.__objects[class_name] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -27,13 +41,6 @@ class FileStorage:
 
     def reload(self):
         """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -48,3 +55,13 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """delete obj from __objects"""
+        if (obj):
+            className = f"{obj.__class__.__name__}.{obj.id}"
+            try:
+                del self.__objects[className]
+            except KeyError:
+                pass
+    
