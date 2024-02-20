@@ -73,10 +73,8 @@ class HBNBCommand(cmd.Cmd):
                     test = test.lstrip('-')
                 if ('.' in test) and (test.replace('.', '', 1).isdigit()):
                     value = float(value)
-                elif test.isdigit():
-                    value = int(value)
                 else:
-                    pass
+                    value = int(value)
 
             new_instance.__dict__[name] = value
 
