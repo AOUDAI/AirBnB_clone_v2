@@ -4,7 +4,7 @@ from models.base_model import Base, BaseModel
 from sqlalchemy import Column, String, ForeignKey
 
 
-class City(Base, BaseModel):
+class City(BaseModel, Base):
     """Defines City class that inherits from Base and BaseModel classes"""
     __tablename__ = "cities"
     name = Column(String(128), nullable=False)
