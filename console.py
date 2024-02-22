@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """ Console Module """
-import cmd
-import sys
+
 from models.base_model import BaseModel
 from models.__init__ import storage
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models.place import Place
+from models.state import State
+from models.user import User
+from models.city import City
+import cmd
 
 
 class HBNBCommand(cmd.Cmd):
@@ -57,10 +57,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = args.split()
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in self.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args[0]]()
+        new_instance = eval(args[0])()
 
         for parameter in args[1:]:
             name, value = parameter.split("=")
@@ -77,8 +77,7 @@ class HBNBCommand(cmd.Cmd):
                     value = int(value)
 
             new_instance.__dict__[name] = value
-
-        storage.save()
+        new_instance.save()
         print(new_instance.id)
 
     def help_create(self):
@@ -154,21 +153,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
-
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+        if not args:
+            myList = [str(value) for value in storage.all().values()]
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            myCls = args.split()[0]
+            if myCls not in self.classes:
+                print("** class doesn't exist **")
+            else:
+                myList = [str(value) for value in storage.all(myCls).values()]
+        print(myList)
 
     def help_all(self):
         """ Help information for the all command """
