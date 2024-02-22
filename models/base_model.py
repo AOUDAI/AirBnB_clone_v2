@@ -27,7 +27,7 @@ class BaseModel:
             self.__dict__ = kwargs
             self.created_at = to_time(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
             self.updated_at = to_time(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
-            self.__dict__.pop("__class__", None)
+            self.__dict__.pop("__class__", "Key not found")
 
 
     def save(self):
@@ -43,11 +43,10 @@ class BaseModel:
         myDict["__class__"] = self.__class__.__name__
         myDict['created_at'] = self.created_at.isoformat()
         myDict['updated_at'] = self.updated_at.isoformat()
-        self.__dict__.pop('_sa_instance_state', None)
+        myDict.pop("_sa_instance_state", None)
         return myDict
     
     def __str__(self):
-        self.__dict__.pop('_sa_instance_state', None)
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
     
     def delete(self):
