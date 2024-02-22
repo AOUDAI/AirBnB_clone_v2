@@ -19,7 +19,7 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if cls:
             instances = {}
-            for key, value in self.__objects:
+            for key, value in self.__objects.items():
                 if key == f"{cls.__class__.__name__}.{cls.id}":
                     instances[key] = value
             return instances
