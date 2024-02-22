@@ -43,7 +43,6 @@ class BaseModel:
         myDict["__class__"] = self.__class__.__name__
         myDict['created_at'] = self.created_at.isoformat()
         myDict['updated_at'] = self.updated_at.isoformat()
-        print(myDict)
         myDict.pop("_sa_instance_state", None)
         return myDict
     
