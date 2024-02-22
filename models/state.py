@@ -7,11 +7,11 @@ from sqlalchemy import Column, String
 
 
 class State(BaseModel, Base):
-    """ State class that inherites from Base and BaseModel classes"""
+    """State class that inherites from Base and BaseModel classes"""
+
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
     cities = relationship("City", backref="state", cascade="all")
-
 
     @property
     def cities(self):
