@@ -23,11 +23,12 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
+            kwargs.pop('__class__', None)
+            for key, value in kwargs.items():
+                setattr(self, key, value)
             to_time = datetime.strptime
-            self.__dict__ = kwargs
             self.created_at = to_time(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
             self.updated_at = to_time(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
-            self.__dict__.pop("__class__", "Key not found")
 
 
     def save(self):
@@ -38,11 +39,11 @@ class BaseModel:
 
     def to_dict(self):
         """Convert instance into dict format"""
-        myDict = {}
-        myDict.update(self.__dict__)
+        myDict = self.__dict__.copy()
         myDict["__class__"] = self.__class__.__name__
         myDict['created_at'] = self.created_at.isoformat()
         myDict['updated_at'] = self.updated_at.isoformat()
+        print(myDict)
         myDict.pop("_sa_instance_state", None)
         return myDict
     

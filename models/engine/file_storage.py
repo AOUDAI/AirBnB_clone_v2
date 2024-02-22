@@ -17,12 +17,6 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls:
-            instances = {}
-            for key, value in self.__objects.items():
-                if isinstance(value, cls):
-                    instances[key] = value
-            return instances
         return self.__objects
 
     def new(self, obj):
@@ -32,13 +26,15 @@ class FileStorage:
 
     def save(self):
         """Saves storage dictionary to file"""
-        with open(self.__file_path, "w") as file:
-            my_dict = self.__objects
-            my_dict = {key: my_dict[key].to_dict() for key in my_dict.keys()}
-            json.dump(my_dict, file)
+        with open(FileStorage.__file_path, 'w') as f:
+            temp = {}
+            temp.update(FileStorage.__objects)
+            for key, val in temp.items():
+                temp[key] = val.to_dict()
+            json.dump(temp, f)
 
     def reload(self):
-        """Loads storage dictionary from file"""
+        """Deserializes the JSON file to __objects (only if the file exists)"""
         try:
             with open(self.__file_path, 'r') as file:
                 data = json.load(file)

@@ -6,9 +6,10 @@ from models.engine.db_storage import DBStorage
 from os import environ
 
 
-if environ.get('HBNB_TYPE_STORAGE') == 'db':
+"""if environ.get('HBNB_TYPE_STORAGE') == 'db':
     storage = DBStorage()
     storage.reload()
-else:
-    storage = FileStorage()
-    storage.reload()
+else:"""
+storage = FileStorage()
+print("hello world" * 12)
+storage.reload()
