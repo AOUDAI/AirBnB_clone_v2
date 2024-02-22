@@ -20,7 +20,7 @@ class FileStorage:
         if cls:
             instances = {}
             for key, value in self.__objects.items():
-                if key == f"{cls.__class__.__name__}.{cls.id}":
+                if isinstance(value, cls):
                     instances[key] = value
             return instances
         return self.__objects
@@ -32,12 +32,10 @@ class FileStorage:
 
     def save(self):
         """Saves storage dictionary to file"""
-        with open(self.__file_path, 'w') as f:
-            temp = {}
-            temp.update(self.__objects)
-            for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+        with open(self.__file_path, "w") as file:
+            my_dict = self.__objects
+            my_dict = {key: my_dict[key].to_dict() for key in my_dict.keys()}
+            json.dump(my_dict, file)
 
     def reload(self):
         """Deserializes the JSON file to __objects (only if the file exists)"""
