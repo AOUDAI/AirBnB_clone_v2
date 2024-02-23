@@ -27,11 +27,11 @@ class BaseModel:
             kwargs.pop("__class__", None)
             for key, value in kwargs.items():
                 setattr(self, key, value)
-            to_time = datetime.strptime
+            fun = datetime.strptime
             if type(self.created_at) is not datetime:
-                self.created_at = to_time(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
+                self.created_at = fun(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
             if type(self.updated_at) is not datetime:
-                self.updated_at = to_time(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
+                self.updated_at = fun(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""

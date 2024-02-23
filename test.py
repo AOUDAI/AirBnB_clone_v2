@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 """ Test link Many-To-Many Place <> Amenity
 """
-from models import *
+from models.amenity import Amenity
+from models.state import State
+from models.city import City
+from models.user import User
+from models.review import Review
+from models.place import Place
+from models import storage
 
 # creation of a State
 state = State(name="California")
@@ -44,4 +50,5 @@ print(place_1.amenities)
 print(amenity_1.place_amenities)
 print(amenity_2.place_amenities)
 print(amenity_3.place_amenities)
+print(place_2.reviews)
 print("OK")
