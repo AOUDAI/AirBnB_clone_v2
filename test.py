@@ -37,7 +37,11 @@ place_1.amenities.append(amenity_2)
 place_2.amenities.append(amenity_1)
 place_2.amenities.append(amenity_2)
 place_2.amenities.append(amenity_3)
-
 storage.save()
-
+print(place_2.amenities)
+print(place_2.reviews)
+print(place_1.amenities)
+print(amenity_1.place_amenities)
+print(amenity_2.place_amenities)
+print(amenity_3.place_amenities)
 print("OK")

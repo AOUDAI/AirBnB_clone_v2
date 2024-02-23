@@ -42,17 +42,3 @@ class Place(BaseModel, Base):
     reviews = relationship('Reviews', backref='place', cascade='delete')
     amenities = relationship('Amenity', secondary="place_amenity", viewonly=False, back_populates='place_amenities')
     amenity_ids = []
-
-    @property
-    def reviews(self):
-        return [item for item in self.reviews if item.place_id == self.id]
-    """@property
-    def amenities(self):
-        return [
-            item for item in self.amenities if item.amenity_id in self.amenity_ids
-        ]
-    
-    @amenities.setter
-    def amenities(self, amenity):
-        if type(amenity) is Amenity:
-            self.amenity_ids.append(amenity.id)"""
