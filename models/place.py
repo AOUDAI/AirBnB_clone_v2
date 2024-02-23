@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 from models.amenity import Amenity
 from models.review import Review
-from models import storage
+import models
 from os import environ
 
 
@@ -59,14 +59,14 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             return [
-                item for item in storage.all(Review) if
+                item for item in models.storage.all(Review) if
                 item.place_id == self.id
             ]
 
         @property
         def amenities(self):
             return [
-                item for item in storage.all(Amenity) if
+                item for item in models.storage.all(Amenity) if
                 item.id in self.amenity_ids
             ]
 
