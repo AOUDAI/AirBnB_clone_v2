@@ -20,17 +20,18 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        if not kwargs:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        if kwargs:
             kwargs.pop("__class__", None)
             for key, value in kwargs.items():
                 setattr(self, key, value)
             to_time = datetime.strptime
-            self.created_at = to_time(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
-            self.updated_at = to_time(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
+            if type(self.created_at) is not datetime:
+                self.created_at = to_time(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
+            if type(self.updated_at) is not datetime:
+                self.updated_at = to_time(self.updated_at, "%Y-%m-%dT%H:%M:%S.%f")
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
