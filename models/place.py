@@ -51,19 +51,20 @@ class Place(BaseModel, Base):
             back_populates="place_amenities",
         )
     amenity_ids = []
+
     if environ.get("HBNB_TYPE_STORAGE") != "db":
         @property
         def reviews(self):
             return [
-                item for item in models.storage.all(Review) if
-                item.place_id == self.id
+                item for item in models.storage.all(Review).values()
+                if item.place_id == self.id
             ]
 
         @property
         def amenities(self):
             return [
-                item for item in models.storage.all(Amenity) if
-                item.id in self.amenity_ids
+                item for item in models.storage.all(Amenity).values()
+                if item.id in self.amenity_ids
             ]
 
         @amenities.setter
