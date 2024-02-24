@@ -12,16 +12,14 @@ import models
 class State(BaseModel, Base):
     """State class that inherites from Base and BaseModel classes"""
 
-    if environ.get("HBNB_TYPE_STORAGE") == "db":
-        __tablename__ = "states"
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state", cascade="delete")
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", backref="state", cascade="delete")
 
-    else:
-        name = ""
-        @property
-        def cities(self):
-            return [
-                city for city in models.storage.all(City).values()
-                if city.state_id == self.id
-            ]
+    # name = ""
+    # @property
+    # def cities(self):
+    #     return [
+    #         city for city in models.storage.all(City).values()
+    #         if city.state_id == self.id
+    #     ]
