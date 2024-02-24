@@ -18,17 +18,10 @@ class HBNBCommand(cmd.Cmd):
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) '
 
-    classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
-    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
-    types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
-            }
+    classes = [
+               'BaseModel', 'User', 'Place', 'State',
+               'City', 'Amenity', 'Review'
+    ]
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -86,32 +79,25 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: create <className>\n")
 
     def do_show(self, args):
-        """ Method to show an individual object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
+        """Prints the string representation of an instance"""
 
-        # guard against trailing args
-        if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
-
-        if not c_name:
+        if not args:
             print("** class name missing **")
-            return
 
-        if c_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+        else:
+            args = args.split()
+            if args[0] not in self.classes:
+                print("** class doesn't exist **")
 
-        if not c_id:
-            print("** instance id missing **")
-            return
+            elif len(args) < 2:
+                print("** instance id missing **")
 
-        key = c_name + "." + c_id
-        try:
-            print(storage._FileStorage__objects[key])
-        except KeyError:
-            print("** no instance found **")
+            elif f"{args[0]}.{args[1]}" not in storage.all().keys():
+                print("** no instance found **")
+
+            else:
+                key = f"{args[0]}.{args[1]}"
+                print(storage.all()[key])
 
     def help_show(self):
         """ Help information for the show command """
@@ -119,32 +105,27 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: show <className> <objectId>\n")
 
     def do_destroy(self, args):
-        """ Destroys a specified object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
-        if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
+        """Deletes an instance based on the class name and id"""
 
-        if not c_name:
+        if not args:
             print("** class name missing **")
-            return
 
-        if c_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+        else:
+            args = args.split()
 
-        if not c_id:
-            print("** instance id missing **")
-            return
+            if args[0] not in self.classes:
+                print("** class doesn't exist **")
 
-        key = c_name + "." + c_id
+            elif len(args) < 2:
+                print("** instance id missing **")
 
-        try:
-            del(storage.all()[key])
-            storage.save()
-        except KeyError:
-            print("** no instance found **")
+            elif f"{args[0]}.{args[1]}" not in storage.all().keys():
+                print("** no instance found **")
+
+            else:
+                key = f"{args[0]}.{args[1]}"
+                del storage.all()[key]
+                storage.save()
 
     def help_destroy(self):
         """ Help information for the destroy command """
@@ -168,100 +149,51 @@ class HBNBCommand(cmd.Cmd):
         print("Shows all objects, or all of a class")
         print("[Usage]: all <className>\n")
 
-    def do_count(self, args):
-        """Count current number of class instances"""
-        count = 0
-        for k, v in storage._FileStorage__objects.items():
-            if args == k.split('.')[0]:
-                count += 1
-        print(count)
-
-    def help_count(self):
-        """ """
-        print("Usage: count <class_name>")
-
     def do_update(self, args):
-        """ Updates a certain object with new info """
-        c_name = c_id = att_name = att_val = kwargs = ''
+        """Updates an instance based on the class name and id"""
 
-        # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
-        args = args.partition(" ")
-        if args[0]:
-            c_name = args[0]
-        else:  # class name not present
+        myDict = storage.all()
+        if not args:
             print("** class name missing **")
-            return
-        if c_name not in HBNBCommand.classes:  # class name invalid
-            print("** class doesn't exist **")
-            return
 
-        # isolate id from args
-        args = args[2].partition(" ")
-        if args[0]:
-            c_id = args[0]
-        else:  # id not present
-            print("** instance id missing **")
-            return
+        else:
+            args = args.split()
+            if args[0] not in self.classes:
+                print("** class doesn't exist **")
 
-        # generate key from class and id
-        key = c_name + "." + c_id
+            elif len(args) == 1:
+                print("** instance id missing **")
 
-        # determine if key is present
-        if key not in storage.all():
-            print("** no instance found **")
-            return
+            else:
+                key = f"{args[0]}.{args[1]}"
+                if key not in myDict.keys():
+                    print(key)
+                    print("** no instance found **")
 
-        # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
-            kwargs = eval(args[2])
-            args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
-            for k, v in kwargs.items():
-                args.append(k)
-                args.append(v)
-        else:  # isolate args
-            args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
-                second_quote = args.find('\"', 1)
-                att_name = args[1:second_quote]
-                args = args[second_quote + 1:]
+                else:
+                    if len(args) == 2:
+                        print("** attribute name missing **")
 
-            args = args.partition(' ')
+                    elif len(args) == 3:
+                        print("** value missing **")
 
-            # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
-                att_name = args[0]
-            # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
-                att_val = args[2][1:args[2].find('\"', 1)]
-
-            # if att_val was not quoted arg
-            if not att_val and args[2]:
-                att_val = args[2].partition(' ')[0]
-
-            args = [att_name, att_val]
-
-        # retrieve dictionary of current objects
-        new_dict = storage.all()[key]
-
-        # iterate through attr names and values
-        for i, att_name in enumerate(args):
-            # block only runs on even iterations
-            if (i % 2 == 0):
-                att_val = args[i + 1]  # following item is value
-                if not att_name:  # check for att_name
-                    print("** attribute name missing **")
-                    return
-                if not att_val:  # check for att_value
-                    print("** value missing **")
-                    return
-                # type cast as necessary
-                if att_name in HBNBCommand.types:
-                    att_val = HBNBCommand.types[att_name](att_val)
-
-                # update dictionary with name, value pair
-                new_dict.__dict__.update({att_name: att_val})
-
-        new_dict.save()  # save updates to file
+                    else:
+                        myInstance = myDict[key]
+                        myValue = args[3]
+                        if myValue[0] == '"' and myValue[-1] == '"':
+                            myValue = myValue.strip('"')
+                        elif myValue.isdigit():
+                            myValue = int(myValue)
+                        elif myValue[0] == "-":
+                            if myValue.replace("-", "").isdigit():
+                                myValue = int(myValue)
+                        else:
+                            try:
+                                myValue = float(mVvalue)
+                            except ValueError:
+                                pass
+                        setattr(myInstance , args[2], myValue)
+                        myInstance.save()
 
     def help_update(self):
         """ Help information for the update class """
