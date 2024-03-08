@@ -19,7 +19,6 @@ echo "server {
 
 	server_name _;
 	index index.html index.htm;
-	error_page 404 /404.html;
 	add_header X-Served-By \$hostname;
 
 	location / {
