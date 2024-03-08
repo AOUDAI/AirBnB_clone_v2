@@ -13,7 +13,7 @@ echo '<html>
 </html>' > /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
-echo 'server {
+echo "server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
@@ -31,5 +31,5 @@ echo 'server {
 		alias /data/web_static/current;
 		try_files \$uri \$uri/ =404;
 	}
-}' > /etc/nginx/sites-available/default
+}" > /etc/nginx/sites-available/default
 service nginx restart
