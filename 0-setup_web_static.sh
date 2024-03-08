@@ -28,7 +28,7 @@ echo 'server {
 	}
 
 	location /hbnb_static/ {
-		alias /data/web_static/current/;
+		alias /data/web_static/current;
 		try_files \$uri \$uri/ =404;
 	}
 }' > /etc/nginx/sites-available/default
