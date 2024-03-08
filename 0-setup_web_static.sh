@@ -13,6 +13,23 @@ echo '<html>
 </html>' > /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
-sed -i "s/location */location \/hbnb_static/" /etc/nginx/sites-available/default
-sed -i '/location \/hbnb_static/ a \		alias \/data\/web_static\/current\/;' /etc/nginx/sites-available/default
+echo 'server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	server_name _;
+	index index.html index.htm;
+	error_page 404 /404.html;
+	add_header X-Served-By \$hostname;
+
+	location / {
+		root /var/www/html/;
+		try_files \$uri \$uri/ =404;
+	}
+
+	location /hbnb_static/ {
+		alias /data/web_static/current/;
+		try_files \$uri \$uri/ =404;
+	}
+}' > /etc/nginx/sites-available/default
 service nginx restart
