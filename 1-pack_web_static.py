@@ -14,4 +14,3 @@ def do_pack():
                                                     strftime("%Y%m%d%H%M%S")))
     except Exception as e:
         return None
-    
