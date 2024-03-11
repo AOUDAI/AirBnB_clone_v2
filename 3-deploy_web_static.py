@@ -117,12 +117,12 @@ def deploy():
 #         return False
 
 
-def deploy(c):
-    """ create and distributes an archive to a web server"""
+# def deploy(c):
+#     """ create and distributes an archive to a web server"""
 
-    archivePath = do_pack()
+#     archivePath = do_pack()
 
-    if archivePath:
-        return do_deploy(archivePath)
-    else:
-        return False
+#     if archivePath:
+#         return do_deploy(archivePath)
+#     else:
+#         return False
