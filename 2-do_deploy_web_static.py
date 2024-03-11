@@ -9,7 +9,7 @@ def do_deploy(archive_path):
     
     Args:
         archive_path (str): the path to archive file
-    Return:
+    Returns:
         True in success, otherwise False.
     """
 
