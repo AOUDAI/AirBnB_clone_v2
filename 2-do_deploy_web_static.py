@@ -6,14 +6,15 @@ fab -f 2-do_deploy_web_static.py do_deploy:archive_path=filepath
 """
 
 from os.path import exists
-from fabric.api import put, run
+from fabric.api import put, run, env
+
+env.hosts = ['35.243.128.200', '3.239.120.96']
 
 
 def do_deploy(archive_path):
     """
     copies archive file from local to my webservers
     """
-
     fileName = (archive_path.split('.')[0]).split('/')[1]
     archiveFile = f"/tmp/{archive_path.split('/')[1]}"
     dataPath = f"/data/web_static/releases/{fileName}/"
