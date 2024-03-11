@@ -12,7 +12,7 @@ def do_pack(c):
         return archiveTime
     except Exception:
         return None
-    
+
 @task
 def do_deploy(c, archive_path):
     """Distributes an archive file into a server"""

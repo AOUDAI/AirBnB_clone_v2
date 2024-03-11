@@ -2,7 +2,8 @@
 """ Defines do_deploy function"""
 
 from fabri.api import put, env, run
-    
+
+
 def do_deploy(archive_path):
     """Distributes an archive file into a server"""
 
@@ -21,6 +22,4 @@ def do_deploy(archive_path):
 
     except Exception:
         return False
-    
     return True
-    
