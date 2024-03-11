@@ -7,6 +7,7 @@ from fabric.api import local
 from fabric.api import put
 from fabric.api import run
 
+env.hosts = ["100.25.193.96", "100.26.169.112"]
 
 def do_pack():
     """Create a tar gzipped archive of the directory web_static."""
@@ -35,7 +36,6 @@ def do_deploy(archive_path):
         Otherwise - True.
     """
 
-    env.hosts = ["104.196.168.90", "35.196.46.172"]
     if os.path.isfile(archive_path) is False:
         return False
     file = archive_path.split("/")[-1]
