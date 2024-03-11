@@ -5,12 +5,13 @@ from fabri.api import put, env, run
 
 
 def do_deploy(archive_path):
-    """ Distributes an archive to a web server.
-    
+    """Distributes an archive to a web server.
+
     Args:
-        archive_path (str): the path to archive file
+        archive_path (str): The path of the archive to distribute.
     Returns:
-        True in success, otherwise False.
+        If the file doesn't exist at archive_path or an error occurs - False.
+        Otherwise - True.
     """
 
     fileName = (archive_path.split('.')[0]).split('/')[1]
