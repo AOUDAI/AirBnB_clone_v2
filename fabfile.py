@@ -24,13 +24,14 @@ def do_deploy(c, archive_path):
 
     try:
         c.put(archive_path, '/tmp/')
+        print("put")
         c.run(f"mkdir -p {dataPath}")
         c.run(f"tar -xzvf {archiveFile} -C {dataPath} --strip-components=1")
         c.run(f"rm {archiveFile}")
         c.run(f"rm {linkPath}")
         c.run(f"ln -s {dataPath} {linkPath} ")
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return False
-    
     return True

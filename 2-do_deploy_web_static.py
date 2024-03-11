@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
 Fabric script to deploy tgz archive
-fab -f 2-do_deploy_web_static.py do_deploy:archive_path=filepath
+fab -f 2-do_deploy_web_statipy do_deploy:archive_path=filepath
     -i private-key -u user
 """
 
 from os.path import exists
-from fabric.api import put, run, env
+from fabriapi import put, run, env
 
 env.hosts = ['100.35.193.96', '100.26.169.112']
 
@@ -16,31 +16,17 @@ def do_deploy(archive_path):
     copies archive file from local to my webservers
     """
 
-    if not exists(archive_path):
-        return False
+    fileName = (archive_path.split('.')[0]).split('/')[1]
+    archiveFile = f"/tmp/{archive_path.split('/')[1]}"
+    dataPath = f"/data/web_static/releases/{fileName}/"
+    linkPath = '/data/web_static/current'
+
     try:
-        file_name = archive_path.split("/")[-1].split(".")[0]
-        put(archive_path, "/tmp/")
-
-        run("mkdir -p /data/web_static/releases/{}".format(file_name))
-
-        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-            .format(file_name, file_name))
-
-        run('rm -rf /tmp/{}.tgz'.format(file_name))
-
-        run(('mv /data/web_static/releases/{}/web_static/* ' +
-            '/data/web_static/releases/{}/')
-            .format(file_name, file_name))
-
-        run('rm -rf /data/web_static/releases/{}/web_static'
-            .format(file_name))
-
-        run('rm -rf /data/web_static/current')
-
-        run(('ln -s /data/web_static/releases/{}/' +
-            ' /data/web_static/current')
-            .format(file_name))
-        return True
+        put(archive_path, '/tmp/')
+        run(f"mkdir -p {dataPath}")
+        run(f"tar -xzvf {archiveFile} -C {dataPath} --strip-components=1")
+        run(f"rm {archiveFile}")
+        run(f"rm {linkPath}")
+        run(f"ln -s {dataPath} {linkPath} ")
     except Exception:
         return False
