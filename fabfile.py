@@ -5,11 +5,13 @@ import time
 def do_pack(c):
     """Creates an archive file for web_static directory"""
 
+    archiveTime = time.strftime("%Y%m%d%H%M%S")
+    archivePath = f"versions/web_static_{archiveTime}.tgz"
+
     try:
-        c.run("mkdir -p versions")
-        archiveTime = time.strftime("%Y%m%d%H%M%S")
-        c.run(f"tar -czvf versions/web_static_{archiveTime}.tgz web_static/")
-        return archiveTime
+        c.local("mkdir -p versions")
+        c.local(f"tar -czvf {archivePath} web_static/")
+        return archivePath
     except Exception:
         return None
 
@@ -24,14 +26,23 @@ def do_deploy(c, archive_path):
 
     try:
         c.put(archive_path, '/tmp/')
-        print("put")
         c.run(f"mkdir -p {dataPath}")
         c.run(f"tar -xzvf {archiveFile} -C {dataPath} --strip-components=1")
         c.run(f"rm {archiveFile}")
         c.run(f"rm {linkPath}")
         c.run(f"ln -s {dataPath} {linkPath} ")
 
-    except Exception as e:
-        print(e)
+    except Exception:
         return False
     return True
+
+@task
+def deploy(c):
+    """ create and distributes an archive to a web server"""
+
+    archivePath = do_pack(c)
+
+    if archivePath:
+        return do_deploy(c, archivePath)
+    else:
+        return False
