@@ -35,8 +35,6 @@ def do_deploy(archive_path):
         Otherwise - True.
     """
 
-    env.hosts = ["100.25.193.96", "100.26.169.112"]
-
     if os.path.isfile(archive_path) is False:
         return False
     file = archive_path.split("/")[-1]
