@@ -32,7 +32,8 @@ def do_deploy(c, archive_path):
         c.run(f"rm {linkPath}")
         c.run(f"ln -s {dataPath} {linkPath} ")
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return False
     return True
 
