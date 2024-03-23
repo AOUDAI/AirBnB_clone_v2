@@ -35,16 +35,14 @@ class DBStorage:
         """Query on the current database session"""
         myDict = {}
         if cls:
-            print("hello, world\n" * 12)
-            for aClass in self.__session.query(eval(cls)).all():
-                print("hello, world\n" * 12)
+            for aClass in self.__session.query(cls).all():
                 classKey = f"{aClass.__class__.__name__}.{aClass.id}"
                 myDict[classKey] = aClass
 
         else:
             classTypes = [User, State, City, Amenity, Place, Review]
             for classType in classTypes:
-                for aClass in (self.__session.query(eval(classType)).all()):
+                for aClass in (self.__session.query(classType).all()):
                     classKey = f"{aClass.__class__.__name__}.{aClass.id}"
                     myDict[classKey] = aClass
 
@@ -74,4 +72,4 @@ class DBStorage:
 
     def close(self):
         """ close the Session"""
-        self.__session.remove()
+        self.__session.close()
