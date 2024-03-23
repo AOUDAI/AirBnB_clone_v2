@@ -8,8 +8,10 @@ from os import environ
 import models
 import uuid
 
-
-Base = declarative_base()
+if environ.get['HBNB_TYPE_STORAGE'] != 'db':
+    Base = declarative_base()
+else:
+    Base = None
 
 
 class BaseModel:

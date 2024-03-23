@@ -6,6 +6,8 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 app.url_map.strict_slashes = False
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 
 
 @app.route("/")
@@ -45,4 +47,4 @@ def odd_or_even(n):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

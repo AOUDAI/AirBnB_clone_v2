@@ -12,14 +12,15 @@ import models
 class State(BaseModel, Base):
     """State class that inherites from Base and BaseModel classes"""
 
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="delete")
-
-    # name = ""
-    # @property
-    # def cities(self):
-    #     return [
-    #         city for city in models.storage.all(City).values()
-    #         if city.state_id == self.id
-    #     ]
+    if Base:
+        __tablename__ = "states"
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref="state", cascade="delete")
+    else:
+        name = ""
+        @property
+        def cities(self):
+            return [
+                city for city in models.storage.all(City).values()
+                if city.state_id == self.id
+                ]
