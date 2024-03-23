@@ -9,14 +9,14 @@ from os import environ
 import models
 
 
-class State(BaseModel, Base):
-    """State class that inherites from Base and BaseModel classes"""
-
-    if Base:
+if environ.get('HBNB_TYPE_STORAGE') == 'db':
+    class State(BaseModel, Base):
+        """State class that inherites from Base and BaseModel classes"""
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state", cascade="delete")
-    else:
+else:
+    class State(BaseModel):
         name = ""
 
         @property
