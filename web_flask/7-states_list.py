@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """ Flask web application that fetchs data from storage"""
 
 from flask import Flask, render_template
