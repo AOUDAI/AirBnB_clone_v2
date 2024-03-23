@@ -52,7 +52,7 @@ class FileStorage:
 
     def close(self):
         """ Call reload methode for deserializing the json file to objs"""
-        reload(self)
+        self.reload()
 
     def delete(self, obj=None):
         """delete obj from __objects"""
