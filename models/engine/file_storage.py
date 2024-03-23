@@ -61,4 +61,4 @@ class FileStorage:
             try:
                 del self.__objects[className]
             except KeyError:
-                pass   
+                pass

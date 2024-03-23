@@ -30,7 +30,7 @@ class DBStorage:
         )
         if environ.get('HBNB_ENV') == 'test':
             MetaData(self.__engine).reflect().drop_all()
-    
+
     def all(self, cls=None):
         """Query on the current database session"""
         myDict = {}
@@ -51,24 +51,24 @@ class DBStorage:
     def new(self, obj):
         """adds the object to the current database"""
         self.__session.add(obj)
-    
+
     def save(self):
         """commit all changes of the current database session"""
         self.__session.commit()
-    
+
     def delete(self, obj=None):
         """delete from the current database session obj"""
         if obj:
             self.__session.delete(obj)
-    
+
     def reload(self):
-            """create the table in the database and the current session"""
-            Base.metadata.create_all(self.__engine)
-            Session = scoped_session(sessionmaker(
-                self.__engine,
-                expire_on_commit=False)
-                )
-            self.__session = Session()
+        """create the table in the database and the current session"""
+        Base.metadata.create_all(self.__engine)
+        Session = scoped_session(sessionmaker(
+            self.__engine,
+            expire_on_commit=False)
+            )
+        self.__session = Session()
 
     def close(self):
         """ close the Session"""
