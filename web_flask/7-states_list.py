@@ -11,10 +11,12 @@ app.url_map.strict_slashes = False
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
+
 @app.route('/states_list')
 def States():
-    states = sorted(list(storage.all(State).values()), key=lambda x: x.name)
+    states = list(storage.all(State).values())
     return render_template('7-states_list.html', states=states)
+
 
 @app.teardown_appcontext
 def clearUp(exeption):
